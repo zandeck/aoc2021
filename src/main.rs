@@ -7,6 +7,7 @@ mod aoc;
 #[derive(Debug)]
 enum Day {
     Day1,
+    Day2,
 }
 
 type ParseError = &'static str;
@@ -16,6 +17,7 @@ impl FromStr for Day {
     fn from_str(day: &str) -> Result<Self, Self::Err> {
         match day {
             "1" => Ok(Day::Day1),
+            "2" => Ok(Day::Day2),
             _ => Err("Could not parse a day"),
         }
     }
@@ -49,13 +51,15 @@ struct Opt {
 
 impl Opt {
     pub fn run_challenge(&self) -> std::io::Result<()> {
-        use aoc::day1;
+        use aoc::{day1, day2};
 
         println!("Running challenge for {:?} {:?}", &self.day, &self.part);
 
         let _ = match (&self.day, &self.part) {
             (Day::Day1, Part::Part1) => day1::part1(),
             (Day::Day1, Part::Part2) => day1::part2(),
+            (Day::Day2, Part::Part1) => day2::part1(),
+            (Day::Day2, Part::Part2) => day2::part2(),
         }?;
 
         Ok(())

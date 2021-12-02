@@ -1,17 +1,6 @@
+use crate::aoc::utils::read_data;
 use itertools::Itertools;
-use std::fs::File;
-use std::io::{self, prelude::*, BufReader};
-use std::str::FromStr;
-
-fn read_data() -> io::Result<impl Iterator<Item = i32>> {
-    let file = File::open("resources/day1.txt")?;
-    let reader = BufReader::new(file);
-
-    Ok(reader.lines().map(|v| match v {
-        Ok(s) => i32::from_str(&s).unwrap(),
-        Err(_) => panic!("Error reading lines from file"),
-    }))
-}
+use std::io::{self};
 
 pub fn consecutive_increasing_depth(depths: impl Iterator<Item = i32>) -> usize {
     depths.tuple_windows().filter(|(a, b)| b > a).count()
@@ -22,13 +11,13 @@ pub fn rolling_depth_3(depths: impl Iterator<Item = i32>) -> impl Iterator<Item 
 }
 
 pub fn part1() -> io::Result<()> {
-    let data = read_data()?;
+    let data = read_data("resources/day1.txt")?;
     println!("{}", consecutive_increasing_depth(data));
     Ok(())
 }
 
 pub fn part2() -> io::Result<()> {
-    let data = read_data()?;
+    let data = read_data("resources/day1.txt")?;
     let rolling_window = rolling_depth_3(data);
     println!("{}", consecutive_increasing_depth(rolling_window));
     Ok(())
