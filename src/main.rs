@@ -8,6 +8,7 @@ mod aoc;
 enum Day {
     Day1,
     Day2,
+    Day3,
 }
 
 type ParseError = &'static str;
@@ -18,6 +19,7 @@ impl FromStr for Day {
         match day {
             "1" => Ok(Day::Day1),
             "2" => Ok(Day::Day2),
+            "3" => Ok(Day::Day3),
             _ => Err("Could not parse a day"),
         }
     }
@@ -51,7 +53,7 @@ struct Opt {
 
 impl Opt {
     pub fn run_challenge(&self) -> std::io::Result<()> {
-        use aoc::{day1, day2};
+        use aoc::{day1, day2, day3};
 
         println!("Running challenge for {:?} {:?}", &self.day, &self.part);
 
@@ -60,6 +62,8 @@ impl Opt {
             (Day::Day1, Part::Part2) => day1::part2(),
             (Day::Day2, Part::Part1) => day2::part1(),
             (Day::Day2, Part::Part2) => day2::part2(),
+            (Day::Day3, Part::Part1) => day3::part1(),
+            (Day::Day3, Part::Part2) => day3::part2(),
         }?;
 
         Ok(())
