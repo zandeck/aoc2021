@@ -25,8 +25,8 @@ pub fn get_gamma_rate(bits: &[i64], n: i64) -> i64 {
         .fold(0, |acc, (i, x)| acc + x * 2_i64.pow((l - i - 1) as u32))
 }
 
-pub fn get_occurence_most(data: &Vec<String>) -> String {
-    let mut res = data.clone();
+pub fn get_occurence_most(data: &[String]) -> String {
+    let mut res = data.to_owned();
     let mut i = 0;
 
     while res.len() != 1 {
@@ -52,8 +52,8 @@ pub fn get_occurence_most(data: &Vec<String>) -> String {
     res.get(0).unwrap().clone()
 }
 
-pub fn get_occurence_least(data: &Vec<String>) -> String {
-    let mut res = data.clone();
+pub fn get_occurence_least(data: &[String]) -> String {
+    let mut res = data.to_owned();
     let mut i = 0;
 
     while res.len() != 1 {

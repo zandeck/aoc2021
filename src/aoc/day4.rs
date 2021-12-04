@@ -1,5 +1,5 @@
 use core::panic;
-use itertools::{iproduct, Itertools};
+use itertools::iproduct;
 use regex::Regex;
 use std::io::BufRead;
 
@@ -20,10 +20,7 @@ impl Board<i64> {
             .get(i)
             .unwrap()
             .iter()
-            .filter(|n| match n {
-                N::Marked(_) => true,
-                _ => false,
-            })
+            .filter(|n| matches!(n, N::Marked(_)))
             .count()
             == 5
     }
@@ -31,10 +28,7 @@ impl Board<i64> {
     pub fn winning_column(&self, i: usize) -> bool {
         (0..5)
             .map(|l| self.data.get(l).unwrap().get(i).unwrap())
-            .filter(|n| match n {
-                N::Marked(_) => true,
-                _ => false,
-            })
+            .filter(|n| matches!(n, N::Marked(_)))
             .count()
             == 5
     }
@@ -86,16 +80,16 @@ fn read_data() -> std::io::Result<(Vec<i64>, Vec<Board<i64>>)> {
     let mut boards = Vec::new();
     let mut buffer: Vec<Vec<N<i64>>> = Vec::new();
 
-    while let Some(line) = lines.next() {
+    for line in lines {
         match line {
             Ok(l) => {
                 let nums: Vec<N<i64>> = re
                     .find_iter(&l)
                     .map(|m| N::UnMarked(m.as_str().parse().unwrap()))
                     .collect();
-                if nums.len() > 0 {
+                if !nums.is_empty() {
                     buffer.push(nums);
-                } else if buffer.len() > 0 {
+                } else if !buffer.is_empty() {
                     boards.push(Board { data: buffer });
                     buffer = Vec::new();
                 }
@@ -112,12 +106,12 @@ pub fn part1() -> std::io::Result<()> {
 
     'main: for draw in draws {
         for board in boards.iter_mut() {
-            println!("{:?}", board);
-            if board.mark(draw) {
-                if board.won() {
-                    println!("{:?}", board.sum_unmarked() * draw);
-                    break 'main;
-                }
+            if board.mark(draw) && board.won() {
+                println!(
+                    "Code for first winning board: {:?}",
+                    board.sum_unmarked() * draw
+                );
+                break 'main;
             }
         }
     }
@@ -130,7 +124,6 @@ pub fn part2() -> std::io::Result<()> {
     let mut draw = draws.iter();
 
     while boards.len() > 1 {
-        dbg!(boards.len());
         let e = draw.next().unwrap();
 
         let mut buff = Vec::new();
@@ -150,11 +143,12 @@ pub fn part2() -> std::io::Result<()> {
     let mut last_board = boards.pop().unwrap();
     while !last_board.won() {
         let e = draw.next().unwrap();
-        if last_board.mark(*e) {
-            if last_board.won() {
-                println!("{:?}", last_board.sum_unmarked() * e);
-                break;
-            }
+        if last_board.mark(*e) && last_board.won() {
+            println!(
+                "Code for last winning code: {:?}",
+                last_board.sum_unmarked() * e
+            );
+            break;
         }
     }
 
